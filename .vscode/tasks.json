@@ -1,0 +1,29 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build asm",
+            "type": "shell",
+            "command": "/usr/local/bin/pasmo",
+            "args": ["-v","-1","--tapbas", "--err", "${file}", "${fileBasenameNoExtension}.tap"],
+        },
+        {
+            "label": "Run tap",
+            "type": "shell",
+            "command": "/Applications/Fuse.app/Contents/MacOS/Fuse",
+            "args": [
+                "${fileBasenameNoExtension}.tap"
+            ],
+        },
+        {
+            "label": "Build & Run",
+            "dependsOn": ["Build asm", "Run tap"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
