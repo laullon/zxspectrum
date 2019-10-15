@@ -4,26 +4,29 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build asm",
+            "label": "Build main.asm",
             "type": "shell",
             "command": "/usr/local/bin/pasmo",
-            "args": ["-v","-1","--tapbas", "--err", "${file}", "${fileBasenameNoExtension}.tap"],
+            "options": {
+                "cwd": "${workspaceFolder}",
+            },
+            "args": ["-I","libzx","--alocal","--tapbas", "--err", "main.asm", "main.tap", "main.symbol"],
         },
         {
-            "label": "Run tap",
+            "label": "Run main.tap",
+            "dependsOn": ["Build main.asm"],
             "type": "shell",
-            "command": "/Applications/Fuse.app/Contents/MacOS/Fuse",
+            "command": "/Applications/Retro Virtual Machine 2.app/Contents/MacOS/Retro Virtual Machine 2",
             "args": [
-                "${fileBasenameNoExtension}.tap"
+                "-b=zx48k",
+                "-i", "main.tap",
+                "-c=\"j \\\"\\\"\\n\"",
+                "-p", "-ns", "-w",
             ],
-        },
-        {
-            "label": "Build & Run",
-            "dependsOn": ["Build asm", "Run tap"],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
-        }
+        },
     ]
 }
