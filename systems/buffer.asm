@@ -78,6 +78,7 @@ _line db 0
 ; Uses the stack to block clear memory
 ;
 Clear_Screen_Fast:
+    di
     ; Save the stack pointer
     ld (SAVE_SP),sp        ; Only remove if you're sure you don't need the stack
     ld sp,screen_end       ; e.g. to fill from &C000 to &FFFF (&4000 bytes), set SP to &FFFF+1 = &0000
@@ -103,6 +104,7 @@ PUSHLOOP:
 ; Restore the stack pointer
     SAVE_SP equ $+1
     ld SP,&9999            ; &9999 will be replaced by the actual previous value
+    ei
     ret
 
 
