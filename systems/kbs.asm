@@ -33,8 +33,12 @@ z_key_is_pressed:
 	ld (hl), KEY_PUSHED
 	
 	ld ix, player
+    ld a, (ix+SP_X)
+	cp 16
+	jp z, _done
+	jp c, _done
 	ld (ix+SP_VX), -2
-
+_done
 	ret
 
 
@@ -53,8 +57,11 @@ x_key_is_pressed:
 	ld (hl), KEY_PUSHED
 
 	ld ix, player
+    ld a, (ix+SP_X)
+	cp 200
+	jp nc, _done
 	ld (ix+SP_VX), 2
-
+_done
 	ret
 
 
