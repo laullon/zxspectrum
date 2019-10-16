@@ -2,8 +2,8 @@ screen defs 32*61,0
 screen_end db 0
 
 update_buffer:
-	ld a, COLOUR_RED					; change border colour to red, to 
-	call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
+	; ld a, COLOUR_RED					; change border colour to red, to 
+	; call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
 
     ld a, 0
     ld (_line), a
@@ -57,8 +57,8 @@ _loop
     dec a
     jp nz, _loop
 
-	ld a, COLOUR_GREEN					; change border colour to red, to 
-	call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
+	; ld a, COLOUR_GREEN					; change border colour to red, to 
+	; call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
 
     ; ld hl, screen
     ; ld de, screen+1
@@ -68,8 +68,8 @@ _loop
 
     call Clear_Screen_Fast
 
-	ld a, COLOUR_WHITE					; change border colour to red, to 
-	call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
+	; ld a, COLOUR_WHITE					; change border colour to red, to 
+	; call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
 
     ret
 _line db 0
@@ -108,7 +108,7 @@ PUSHLOOP:
 
 
 
-xy2buff:
+sprite_xy2buff:
     push hl
 
     ld a, (ix+SP_X)

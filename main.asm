@@ -42,8 +42,8 @@ loop:
 
 	; halt 
 
-	; ld a, COLOUR_BLUE					; change border colour to red, to 
-	; call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
+	ld a, COLOUR_BLUE					; change border colour to red, to 
+	call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
 
 	call keyboard_update
 	call update_animations
@@ -53,8 +53,8 @@ loop:
 	; halt
 	call render_sprites
 
-	; ld a, COLOUR_WHITE
-	; call ROM_ROUTINE_SET_BORDER_COLOUR
+	ld a, COLOUR_WHITE
+	call ROM_ROUTINE_SET_BORDER_COLOUR
 
 
 	; call movefloor
