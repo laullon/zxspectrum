@@ -1,8 +1,6 @@
 update_animations
-    ld a, 0
-    ld (_act_sprite), a
-    ld ix, sprites          ;; first sprite
-_update
+    call frist_strite
+_loop
     ld a, (ix+SP_F)
     ld b, (ix+SP_FC)
     inc a
@@ -12,16 +10,7 @@ _update
 _end
     ld (ix+SP_F), a
 
-    ld a, (_act_sprite)     ;; more sprites?
-    inc a
-    ld (_act_sprite), a
-    cp num_sprites
+    call next_sprite
     ret z
-
-    ld a, 0                 ;; next sprite
-    ld b, a
-    ld a, SP_SIZE
-    ld c, a
-    add ix, bc
-    jp _update
+    jp _loop
 _act_sprite db 0

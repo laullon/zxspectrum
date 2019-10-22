@@ -44,4 +44,26 @@ blocks:
     dw 0
     db 0, 0, 0
 
-num_sprites equ 3
+    db $ff
+
+;; output:
+;;      ix - point to the frist sprite
+frist_strite
+    ld ix, sprites
+    ret
+
+;; input:
+;;      ix - point to the actual sprite
+;; output:
+;;      ix - point to the next sprite
+;;      z - set if no more sprites
+next_sprite
+    push bc
+    ld b, 0
+    ld c, SP_SIZE
+    add ix, bc
+    pop bc
+    ld a, (ix)
+    cp #ff
+    ret
+

@@ -1,5 +1,6 @@
 apply_scroll
-    ld ix, player
+    call frist_strite
+
     ld a, (ix+SP_X)
     and %11110000
     rrca
@@ -10,26 +11,13 @@ apply_scroll
     inc a
     ld d, a
 
-    ld a, 0
-    ld (_act_sprite), a
-    ld ix, sprites
 _loop
+    call next_sprite
+    ret z
     ld a, (ix+SP_FLGS)
     and FLG_SCROLL
 	jp z, _next
 	ld (ix+SP_VX), d
 
 _next
-    ld a, (_act_sprite)
-    inc a
-    ld (_act_sprite), a
-    cp num_sprites
-    ret z
-
-    ld a, 0
-    ld b, a
-    ld a, SP_SIZE
-    ld c, a
-    add ix, bc
     jp _loop
-_act_sprite db 0

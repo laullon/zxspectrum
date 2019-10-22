@@ -1,10 +1,11 @@
 check_for_collisions
-    ld a, 1
-    ld (_act_sprite), a
-    ld ix, player
-    ld iy, blocks
+    ld iy, player
+    call frist_strite
 
 _loop
+    call next_sprite
+    ret z
+
     ld a, (ix+SP_X)
     add a, (ix+SP_W_PX)
     sub (iy+SP_X)
@@ -37,16 +38,5 @@ _no_collision
 	ld c, 7							; column
 	call bitmaps_colours_set		; call routine
 
-_next
-    ld a, (_act_sprite)
-    inc a
-    ld (_act_sprite), a
-    cp num_sprites
-    ret z
-
-    ld b, 0
-    ld c, SP_SIZE
-    add iy, bc
     jp _loop
 
-_act_sprite  db 0

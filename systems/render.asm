@@ -1,9 +1,8 @@
 
 
 render_sprites:
-    ld a, 0
-    ld (_act_sprite), a
-    ld ix, sprites
+    call frist_strite
+
 _render_sprites_loop
     ld a, (ix+SP_F)
     ld c, (ix+SP_DT)
@@ -23,19 +22,9 @@ _render_sprites_loop
 _shift_done
     call draw_sprite
 
-    ld a, (_act_sprite)
-    inc a
-    ld (_act_sprite), a
-    cp num_sprites
+    call next_sprite
     ret z
-
-    ld a, 0
-    ld b, a
-    ld a, SP_SIZE
-    ld c, a
-    add ix, bc
     jp _render_sprites_loop
-_act_sprite  db 0
 _num_shifts  db 0
 
 
