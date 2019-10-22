@@ -1,12 +1,10 @@
 
-act_sprite  db 0
-num_shifts  db 0
 
 render_sprites:
     ld a, 0
-    ld (act_sprite), a
+    ld (_act_sprite), a
     ld ix, sprites
-render_sprites_loop
+_render_sprites_loop
     ld a, (ix+SP_F)
     ld c, (ix+SP_DT)
     ld b, (ix+SP_DT+1)
@@ -15,19 +13,19 @@ render_sprites_loop
     ld a, %00000111
     ld b, (ix+SP_X)
     and b
-    ld (num_shifts), a
+    ld (_num_shifts), a
     cp 0
-    jp z, shift_done
+    jp z, _shift_done
     ld a, (ix+SP_H)
     ld b, a
-    ld a, (num_shifts)
+    ld a, (_num_shifts)
     call shift_sprite_1px
-shift_done
+_shift_done
     call draw_sprite
 
-    ld a, (act_sprite)
+    ld a, (_act_sprite)
     inc a
-    ld (act_sprite), a
+    ld (_act_sprite), a
     cp num_sprites
     ret z
 
@@ -36,7 +34,9 @@ shift_done
     ld a, SP_SIZE
     ld c, a
     add ix, bc
-    jp render_sprites_loop
+    jp _render_sprites_loop
+_act_sprite  db 0
+_num_shifts  db 0
 
 
 shift_sprite_buff defs 4*26,0

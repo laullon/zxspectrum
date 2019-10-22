@@ -7,17 +7,15 @@ main: org 33000					; stay above ULA-contended memory
 	include "systems/buffer.asm"
 	include "systems/kbs.asm"
 	include "systems/scroll.asm"
+	include "systems/collisions.asm"
+
 	include "game/sprites.asm"
+
 	include "resources/player.asm"
 	include "resources/floor.asm"
 	include "resources/wall.asm"
 
-man_sprite_frame:	db  0
-floor_frame:	db  0
-x_coordinate:	db	24*3
-y_coordinate:	db	100
-
-COLOUR_BLACK equ 0
+COLOUR_BLACK equ 0x0
 COLOUR_BLUE equ 1
 COLOUR_RED equ 2
 COLOUR_MAGENTA equ 3
@@ -49,6 +47,7 @@ loop:
 	call update_animations
 	call apply_scroll
 	call update_physics
+	call check_for_collisions
 
 	; halt
 	call render_sprites
@@ -61,126 +60,6 @@ loop:
 	; call drawfloor
 	jr loop
 
-tiles db 0
-tile_x db 0
-drawfloor:
-	ld a, 10
-	ld (tiles), a
-	ld a, 0
-	ld (tile_x), a
-drawfloorloop
-	call getfloor
-	ld a, 126
-	ld b, a
-	ld a, (tile_x)
-	ld c, a
-	ld a, 3
-	call draw3sprite
-	
-	ld a, (tile_x)
-	ld b, 24
-	add a, b
-	ld (tile_x), a
-	
-	ld a, (tiles)
-	dec a
-	ld (tiles), a
-	cp 0
-	jp nz, drawfloorloop
-	ret
-
-;;
-;; draw3Tile
-;;
-;; input:
-;;			A = lines
-;;			C = x
-;;			B = y
-;;			HL= data
-;; destroy: A,D,C
-
-lines db 0
-draw3sprite:
-	ld (lines), a
-	call yx2pix		;point DE at corresponding screen position
-draw3spriteloop
-	ld bc, 3
-	ldir
-	call nextlinedown
-	dec e
-	dec e
-	dec e
-	ld a, (lines)
-	dec a
-	ld (lines), a
-	cp 0
-	jp nz, draw3spriteloop
-	ret
-
-nextlinedown:			;don't worry about how this works yet!
-	inc d			;just arrive with DE in the display file
-	ld a,d			;and it gets moved down one line
-	and 7
-	ret nz
-	ld a,e
-	add a,32
-	ld e,a
-	ret c
-	ld a,d
-	sub 8
-	ld d,a
-	ret
-
-yx2pix:		;don't worry about how this works yet! just arrive with arrive with B=y 0-192, C=x 0-255
-	ld a,b	;return with DE at corresponding place on the screen
-	rra
-	rra
-	rra
-	and 24
-	or 64
-	ld d,a
-	ld a,b
-	and 7
-	or d
-	ld d,a
-	ld a,b
-	rla
-	rla
-	and 224
-	ld e,a
-	ld a,c
-	rra
-	rra
-	rra
-	and 31
-	or e
-	ld e,a
-	ret
-	;
-
-movefloor:		
-	ld	a,(floor_frame)	;but we still need to find which preshifted sprite to draw
-	inc a
-	cp	3
-	jp	nz, no_floor_reset
-	ld	a, 0
-no_floor_reset
-	ld	(floor_frame), a
-	ret
-
-getfloor:		
-	ld	a,(floor_frame)
-	add a,a		;multiplay a by 2, this converts a single byte number 0-7 into a 2 byte table entry
-	ld h,0
-	ld l,a
-	ld bc,floor_addresses
-	add hl,bc	;HL is now pointing at the correct table entry
-	ld c,(hl)
-	inc hl
-	ld b,(hl)	;get table address spritegraphic0, spritegraphic1 etc in BC
-	ld l,c
-	ld h,b		;now HL is pointing at the correct sprite graphic
-	ret
 
 
 wait   ld hl,pretim        ; previous time setting

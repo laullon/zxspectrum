@@ -11,7 +11,7 @@ apply_scroll
     ld d, a
 
     ld a, 0
-    ld (act_sprite), a
+    ld (_act_sprite), a
     ld ix, sprites
 _loop
     ld a, (ix+SP_FLGS)
@@ -20,9 +20,9 @@ _loop
 	ld (ix+SP_VX), d
 
 _next
-    ld a, (act_sprite)
+    ld a, (_act_sprite)
     inc a
-    ld (act_sprite), a
+    ld (_act_sprite), a
     cp num_sprites
     ret z
 
@@ -32,3 +32,4 @@ _next
     ld c, a
     add ix, bc
     jp _loop
+_act_sprite db 0

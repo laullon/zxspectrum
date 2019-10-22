@@ -5,7 +5,7 @@ update_physics
 
 phy_jump:
     ld a, 0
-    ld (act_sprite), a
+    ld (_act_sprite), a
     ld ix, sprites
 _loop
     ld a, (ix+SP_JP_ON)
@@ -33,9 +33,9 @@ _stop
     ld (ix+SP_JP_ON), 0
     ld (ix+SP_JP_C), 0
 _next
-    ld a, (act_sprite)
+    ld a, (_act_sprite)
     inc a
-    ld (act_sprite), a
+    ld (_act_sprite), a
     cp num_sprites
     ret z                   ; no more sprites
     ld a, 0
@@ -45,10 +45,11 @@ _next
     add ix, bc
     jp _loop
     ret
+_act_sprite db 0
 
 phy_move:
     ld a, 0
-    ld (act_sprite), a
+    ld (_act_sprite), a
     ld ix, sprites
 _update_physics_loop
     ld a, (ix+SP_VX)
@@ -61,9 +62,9 @@ _update_physics_loop
     jp nz, _end
     ld (ix+SP_VX), 0
 _end
-    ld a, (act_sprite)
+    ld a, (_act_sprite)
     inc a
-    ld (act_sprite), a
+    ld (_act_sprite), a
     cp num_sprites
     ret z
     ld a, 0
@@ -72,3 +73,4 @@ _end
     ld c, a
     add ix, bc
     jp _update_physics_loop
+_act_sprite db 0

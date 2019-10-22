@@ -1,6 +1,6 @@
 update_animations
     ld a, 0
-    ld (act_sprite), a
+    ld (_act_sprite), a
     ld ix, sprites          ;; first sprite
 _update
     ld a, (ix+SP_F)
@@ -12,9 +12,9 @@ _update
 _end
     ld (ix+SP_F), a
 
-    ld a, (act_sprite)     ;; more sprites?
+    ld a, (_act_sprite)     ;; more sprites?
     inc a
-    ld (act_sprite), a
+    ld (_act_sprite), a
     cp num_sprites
     ret z
 
@@ -24,3 +24,4 @@ _end
     ld c, a
     add ix, bc
     jp _update
+_act_sprite db 0

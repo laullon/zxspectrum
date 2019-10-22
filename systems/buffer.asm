@@ -12,7 +12,7 @@ update_buffer:
     ld a, (_line)
     add a, 110
     ld b, a
-    ld a, 60
+    ld a, 58
 _loop
     ld c, 32                    ; ldi messup wirh BC
     call coords_to_address
