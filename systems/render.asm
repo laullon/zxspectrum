@@ -1,7 +1,7 @@
 
 
 render_sprites:
-    call frist_strite
+    call first_sprite
 
 _render_sprites_loop
     ld a, (ix+SP_F)

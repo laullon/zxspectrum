@@ -1,6 +1,6 @@
 check_for_collisions
     ld iy, player
-    call frist_strite
+    call first_sprite
 
 _loop
     call next_sprite

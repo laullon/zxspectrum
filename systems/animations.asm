@@ -1,5 +1,5 @@
 update_animations
-    call frist_strite
+    call first_sprite
 _loop
     ld a, (ix+SP_F)
     ld b, (ix+SP_FC)

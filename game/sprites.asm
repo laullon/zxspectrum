@@ -48,7 +48,7 @@ blocks:
 
 ;; output:
 ;;      ix - point to the frist sprite
-frist_strite
+first_sprite
     ld ix, sprites
     ret
 

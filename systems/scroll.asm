@@ -1,5 +1,5 @@
 apply_scroll
-    call frist_strite
+    call first_sprite
 
     ld a, (ix+SP_X)
     and %11110000

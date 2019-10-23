@@ -4,7 +4,7 @@ update_physics
     ret	
 
 phy_jump:
-    call frist_strite
+    call first_sprite
 _loop
     ld a, (ix+SP_JP_ON)
     cp 0
@@ -36,7 +36,7 @@ _next
     jp _loop
 
 phy_move:
-    call frist_strite
+    call first_sprite
 _loop
     ld a, (ix+SP_VX)
     ld b, (ix+SP_X)
