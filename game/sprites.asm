@@ -17,6 +17,9 @@ SP_JP_ST    equ 17
 SP_SIZE equ 18
 
 FLG_SCROLL  equ %0000001
+FLG_EMPTY   equ %1000000
+
+NUM_SLOTS equ 32
 
 ;; x, y, vx, vy, flags
 ;; data
@@ -31,20 +34,26 @@ player:
     dw man_jump_squence
     db 0, 0, 13
 
-blocks:
-    db 200, 50, 0, 0, FLG_SCROLL
-    dw wall_sprite_addresses
-    db 2, 8, 8, 16, 1, 0
-    dw 0
-    db 0, 0, 0
+slots:
+    defs NUM_SLOTS*SP_SIZE,0
 
-    db 100, 42, 0, 0, FLG_SCROLL
-    dw wall_sprite_addresses
-    db 2, 8, 16, 32, 1, 0
-    dw 0
-    db 0, 0, 0
+    dw #FFFF, #FFFF
 
-    db $ff
+;; init
+init_sprites
+    ld b, 0
+    ld c, SP_SIZE
+    ld ix, slots
+_loop
+    ld (ix+SP_X), #FF
+    ld (ix+SP_Y), #FF
+    ld (ix+SP_FLGS), FLG_EMPTY
+    add ix, bc                  ; next slot
+    ld a, (ix)
+    and (ix+1)
+    cp #ff                      ; end ?
+    ret z
+    jp _loop
 
 ;; output:
 ;;      ix - point to the frist sprite
@@ -63,7 +72,66 @@ next_sprite
     ld c, SP_SIZE
     add ix, bc
     pop bc
-    ld a, (ix)
+
+    ld a, (ix)  ; end ?
+    and (ix+1)
     cp #ff
+    ret z
+
+    ld a, (ix+SP_FLGS) ; is empty?
+    and FLG_EMPTY
+    jp nz, next_sprite
+    or 1               ; reset z 
     ret
 
+
+;; input:
+;;      iy - point to the new sprite data
+;; output:
+;;      ix - point to the new sprite
+add_sprite
+    call first_empty_slot   ; go to sprite array end
+    ret z
+
+    push ix
+    ld b, SP_SIZE
+_copy
+    ld a, (iy)
+    ld (ix), a
+    inc ix
+    inc	iy
+    djnz _copy
+
+    pop ix
+    ret
+
+;; first_empty_slot:
+;; output:
+;;      ix - point to the first empty sprite
+;;      z - set if no more sprites
+first_empty_slot
+    ld ix, slots
+_loop
+    ld a, (ix+SP_FLGS)
+    and FLG_EMPTY
+    ret nz
+    call next_slot
+    ret z
+    jp _loop
+
+;; input:
+;;      ix - point to the actual sprite
+;; output:
+;;      ix - point to the next sprite
+;;      z - set if no more sprites
+next_slot
+    push bc
+    ld b, 0
+    ld c, SP_SIZE
+    add ix, bc
+    pop bc
+    ld a, (ix)
+    and (ix+1)
+    and (ix+2)
+    cp #ff
+    ret

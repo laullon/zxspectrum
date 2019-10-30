@@ -9,6 +9,7 @@ main: org 33000					; stay above ULA-contended memory
 	include "systems/scroll.asm"
 	include "systems/collisions.asm"
 
+	include "game/game.asm"
 	include "game/sprites.asm"
 
 	include "resources/player.asm"
@@ -31,29 +32,34 @@ VIDEO_SEGMENT_SIZE equ 2048		; size in bytes of a third of a screen
 
 
 start:
-
+	call init_sprites
+	call game_init
+	
 loop:
 	; call wait
 	halt
 
+	; ld a, COLOUR_BLUE					; change border colour to red, to 
+	; call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
+
 	call update_buffer
+
+	; ld a, COLOUR_WHITE
+	; call ROM_ROUTINE_SET_BORDER_COLOUR
 
 	; halt 
 
-	ld a, COLOUR_BLUE					; change border colour to red, to 
-	call ROM_ROUTINE_SET_BORDER_COLOUR	; illustrate amount of CPU time spent
 
 	call keyboard_update
+	call game_update
 	call update_animations
 	call apply_scroll
 	call update_physics
 	call check_for_collisions
 
-	; halt
+
 	call render_sprites
 
-	ld a, COLOUR_WHITE
-	call ROM_ROUTINE_SET_BORDER_COLOUR
 
 
 	; call movefloor
